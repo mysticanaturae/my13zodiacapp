@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>13-Zodiak Astrologija</title>
+  <title>13-Zodiak Astrologija ✨</title>
+  <link rel="manifest" href="./manifest.json">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap');
 
   <!-- Manifest za PWA -->
   <link rel="manifest" href="./manifest.json">
@@ -24,17 +28,25 @@
 
 <body style="background:#111; margin:0; padding:0; font-family: Arial, sans-serif;">
 
-  <div id="zodiacApp" style="max-width:1000px; margin:auto; padding:20px; background:#fff; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.1); position:relative;"> 
+  <div id="zodiacApp">
 
-    <!-- ✨ Kozmični naslov -->
-    <div style="text-align:center; margin-bottom:40px;">
-      <h1 style="font-size:46px; font-weight:700; font-family:'Playfair Display', serif; letter-spacing:2px; line-height:1.2; margin:0; padding:0;
-                 background: linear-gradient(90deg, #ffe9b3, #ffb6e3, #c89cff, #ffe9b3);
-                 -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 14px rgba(255,255,255,0.25);">
-        ✧ 13-ZODIAK ASTROLOGIJA ✧
-      </h1>
-      <p style="font-size:18px; color:#555; letter-spacing:0.6px;">Odkrij svojo resnično kozmično identiteto & energijski podpis duše</p>
+    <h1>✨ 13-ZODIAK ASTROLOGIJA ✨</h1>
+    <p class="subtitle">Odkrij svojo resnično kozmično identiteto & energijski podpis duše</p>
+
+    <div class="inputGroup">
+      <input type="text" id="nameInput" placeholder="Ime">
+      <input type="date" id="dobInput" placeholder="Datum rojstva">
+      <input type="time" id="timeInput" placeholder="Ura rojstva">
+      <input type="text" id="placeInput" placeholder="Kraj in država rojstva">
+      <button id="btnCompute">Freemium Izračun</button>
+      <button id="btnPremium">✨ Premium Napoved</button>
     </div>
+
+    <div id="statusText"></div>
+    <div id="snapshotBox"></div>
+    <div id="signsRepeater"></div>
+
+  </div>
 
     <!-- 🪐 Inputs -->
     <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:20px;">
