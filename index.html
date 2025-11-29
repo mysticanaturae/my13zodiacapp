@@ -42,7 +42,7 @@
       <input type="text" id="nameInput" placeholder="Ime" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:150px;">
       <input type="date" id="dobInput" placeholder="Datum rojstva" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:150px;">
       <input type="time" id="timeInput" placeholder="Ura rojstva" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:120px;">
-      <input type="text" id="placeInput" placeholder="Kraj rojstva" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:150px;">
+      <input type="text" id="placeInput" placeholder="Kraj in država rojstva" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:250px;">
       <button id="btnCompute" style="padding:10px 20px; border:none; border-radius:8px; background:#6c63ff; color:#fff; cursor:pointer;">Izračunaj</button>
       <button id="btnPremium" style="padding:10px 20px; border:none; border-radius:8px; background:#ff6584; color:#fff; cursor:pointer;">Premium Napovedi</button>
     </div>
@@ -101,6 +101,26 @@ const houses13 = [
   {number:12, name:"Hiša Prijateljstev", ruler:"Vodnar", description:"Skupnosti, prijatelji, dolgoročni cilji."},
   {number:13, name:"Hiša Duše in Karmičnih Lekcij", ruler:"Ribi", description:"Karma, skrivnosti, razsvetljenje, duhovna rast."}
 ];
+
+function renderZodiacCards(housesAssigned) {
+  const container = document.getElementById('signsRepeater');
+  container.innerHTML = ''; // počisti prejšnje
+
+  housesAssigned.forEach(h => {
+    const card = document.createElement('div');
+    card.style.background = '#f0f0f0';
+    card.style.borderRadius = '10px';
+    card.style.padding = '15px';
+    card.style.textAlign = 'center';
+    card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+
+    card.innerHTML = `<strong>${h.number}. ${h.name}</strong><br>
+                      Znak: ${h.sign}<br>
+                      Vladar: ${h.ruler}`;
+
+    container.appendChild(card);
+  });
+}
 
 /* -------------------------
    Helper: parse MM-DD from Date object
@@ -306,11 +326,11 @@ function loadUserData(){ const d = localStorage.getItem('astroUser'); return d?J
 
 document.getElementById('btnCompute').addEventListener('click', async () => {
   const userData = {
-    name: document.getElementById('nameInput').value || 'Anonim',
-    dob: document.getElementById('dobInput').value,
-    time: document.getElementById('timeInput').value || '00:00',
-    place: document.getElementById('placeInput').value || ''
-  };
+  name: document.getElementById('nameInput').value || 'Anonim',
+  dob: document.getElementById('dobInput').value,
+  time: document.getElementById('timeInput').value || '00:00',
+  place: document.getElementById('placeInput').value || ''  // vnesi kraj + država
+};
   saveUserData(userData);
   const computed = composeSnapshotText(userData);
   document.getElementById('snapshotBox').innerText = computed.text;
@@ -325,6 +345,7 @@ document.getElementById('btnPremium').addEventListener('click', async () => {
   if (!userData) { alert('Najprej izračunaj svoj snapshot!'); return; }
   document.getElementById('statusText').innerText = "Generiram premium napoved...";
   const computed = composeSnapshotText(userData);
+  renderZodiacCards(computed.housesAssigned);
   const premium = await generatePrediction('premium', userData, computed);
   // replace snapshot with premium block
   document.getElementById('snapshotBox').innerText = premium;
