@@ -1,0 +1,29 @@
+name: Deploy Zodiac App
+
+on:
+  push:
+    branches:
+      - main  # Samo ob pushu v glavno vejo
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build and Deploy
+      run: |
+        npm run build  # Sestavi aplikacijo, če uporabljaš build
+        npm run deploy  # Ali uporabite specifičen deploy ukaz (če uporabljaš Vercel ali Netlify)
+      env:
+        OPENAI_KEY: ${{ secrets.OPENAI_KEY }}  # Povezava z GitHub Secret
