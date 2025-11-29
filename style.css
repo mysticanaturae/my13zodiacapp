@@ -1,0 +1,52 @@
+body {
+  background:#111;
+  margin:0;
+  font-family: Arial, sans-serif;
+  color:#fff;
+}
+
+#zodiacApp {
+  max-width: 1000px;
+  margin:auto;
+  padding:20px;
+  background:#1a1a1a;
+  border-radius:15px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+
+#header h1 {
+  font-size: 46px;
+  text-align:center;
+  background: linear-gradient(90deg,#ffe9b3,#ffb6e3,#c89cff,#ffe9b3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#header p {
+  text-align:center;
+  margin-top:10px;
+  font-size:18px;
+  color:#ccc;
+}
+
+#inputs {
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+#inputs input, #inputs button {
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  outline:none;
+}
+
+#btnCompute { background:#6c63ff; color:#fff; cursor:pointer; }
+#btnPremium { background:#ff6584; color:#fff; cursor:pointer; }
+
+#statusText { text-align:center; font-style:italic; margin-bottom:10px; }
+#snapshotBox { background:#222; padding:20px; border-radius:10px; white-space:pre-line; margin-bottom:30px; }
+#signsRepeater { display:grid; grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); gap:15px; }
