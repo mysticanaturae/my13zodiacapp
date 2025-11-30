@@ -196,7 +196,6 @@ async function generatePrediction(level, userData, computed){
 
 // Local storage helpers
 function saveUserData(userData){ localStorage.setItem('astroUser',JSON.stringify(userData)); }
-function loadUserData(){ const d=localStorage.getItem('astroUser'); return d?JSON.parse(d):null; }
 
 // Event listeners
 document.getElementById('btnCompute').addEventListener('click', async()=>{
