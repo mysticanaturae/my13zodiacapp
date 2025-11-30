@@ -56,13 +56,6 @@
 
   </div>
 
-<!-- Panel za freemium Sonce, Luno, Ascendent -->
-<div id="astroSnapshot" class="astroSnapshot">
-  🌞 Sonce: <span id="sunSign">-</span> |
-  🌙 Luna: <span id="moonSign">-</span> |
-  ⬆️ Ascendent: <span id="ascSign">-</span>
-</div>
-
   <script>
 // Ob nalaganju strani
 document.addEventListener('DOMContentLoaded', () => {
@@ -163,14 +156,9 @@ function composeSnapshotText(userData){
   return {text, sun, moon, asc, housesAssigned};
 }
 
-// ======== Funkcija za posodobitev freemium panela Sonce/Luna/Ascendent ========
-function updateSnapshotPanel(computed){
-  document.getElementById('sunSign').innerText = computed.sun;
-  document.getElementById('moonSign').innerText = computed.moon;
-  document.getElementById('ascSign').innerText = computed.asc;
-}
-
-// ======== Render funkcija za hiše ========
+// ============================
+// Render function
+// ============================
 function renderZodiacCards(housesAssigned, level='free'){
   const container = document.getElementById('signsRepeater');
   container.innerHTML = '';
@@ -245,7 +233,13 @@ function demoPremiumText(userData,computed){
   return out;
 }
 
-// ======== Event listeners ========
+// ============================
+// Event listeners
+// ============================
+document.addEventListener('DOMContentLoaded', () => {
+  renderZodiacCards(houses13, 'free'); // naloži hiše ob strani
+});
+
 document.getElementById('btnCompute').addEventListener('click', async ()=>{
   const userData = {
     name: document.getElementById('nameInput').value||'Anonim',
@@ -255,13 +249,7 @@ document.getElementById('btnCompute').addEventListener('click', async ()=>{
   };
   saveUserData(userData);
   const computed = composeSnapshotText(userData);
-
-  // Posodobi panel Sonce/Luna/Ascendent
-  updateSnapshotPanel(computed);
-
-  // Freemium verzija
   renderZodiacCards(computed.housesAssigned, 'free');
-
   const freeText = await generatePrediction('free', userData, computed);
   document.getElementById('snapshotBox').innerText = freeText;
   document.getElementById('statusText').innerText = "Freemium napoved pripravljena!";
@@ -270,16 +258,9 @@ document.getElementById('btnCompute').addEventListener('click', async ()=>{
 document.getElementById('btnPremium').addEventListener('click', async ()=>{
   const userData = loadUserData();
   if(!userData){ alert('Najprej izračunaj svoj snapshot!'); return; }
-
   document.getElementById('statusText').innerText = "Generiram premium napoved...";
   const computed = composeSnapshotText(userData);
-
-  // Premium panel posodobi tudi Sonce/Luna/Ascendent
-  updateSnapshotPanel(computed);
-
-  // Premium verzija z vsemi slikami
   renderZodiacCards(computed.housesAssigned, 'premium');
-
   const premium = await generatePrediction('premium', userData, computed);
   document.getElementById('snapshotBox').innerText = premium;
   document.getElementById('statusText').innerText = "Premium napoved pripravljena!";
