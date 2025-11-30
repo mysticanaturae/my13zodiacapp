@@ -69,7 +69,12 @@ const referenceBirth = { dob: "1978-03-10", time: "00:55", sun: "Vodnar", moon: 
 // =====================================================
 // Funkcije za izračune
 // =====================================================
-function formatMMDD(date){ const m=(date.getMonth()+1).toString().padStart(2,'0'); const d=date.getDate().toString().padStart(2,'0'); return `${m}-${d}`; }
+function formatMMDD(date){ 
+  const m=(date.getMonth()+1).toString().padStart(2,'0'); 
+  const d=date.getDate().toString().padStart(2,'0'); 
+  return `${m}-${d}`; 
+}
+
 function getBergSunSign(date){
   const mmdd = formatMMDD(date);
   for(const interval of bergIntervals){
@@ -118,7 +123,9 @@ function composeSnapshotText(userData){
   return { text, sun, moon, asc, housesAssigned };
 }
 
-// Funkcija za render vseh hiš ob odprtju (freemium)
+// =====================================================
+// Render hiš in slik
+// =====================================================
 function renderZodiacCards(housesAssigned, level='free') {
   const container = document.getElementById('signsRepeater');
   container.innerHTML = '';
@@ -128,11 +135,11 @@ function renderZodiacCards(housesAssigned, level='free') {
     card.className = 'zodiacCard';
 
     let imagesHTML = `<div class="imgContainer">
-                    <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}" title="Vladar: ${h.ruler}">`;
-if(level === 'premium') {
-  imagesHTML += `<img src="${zodiacImages[h.sign]}" class="signImage" alt="${h.sign}" title="Znak: ${h.sign}">`;
-}
-imagesHTML += `</div>`;
+                        <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}" title="Vladar: ${h.ruler}">`;
+    if(level==='premium'){
+      imagesHTML += `<img src="${zodiacImages[h.sign]}" class="signImage" alt="${h.sign}" title="Znak: ${h.sign}">`;
+    }
+    imagesHTML += `</div>`;
 
     card.innerHTML = `
       <div class="houseName">${h.number}. ${h.name}</div>
@@ -146,11 +153,6 @@ imagesHTML += `</div>`;
     container.appendChild(card);
   });
 }
-
-// Ob nalaganju strani prikažemo vse hiše z vladarji (freemium)
-document.addEventListener('DOMContentLoaded', () => {
-  renderZodiacCards(houses13, 'free'); // vse hiše, freemium (samo vladar)
-});
 
 // =====================================================
 // Generiranje napovedi
@@ -205,15 +207,9 @@ function buildPremiumPrompt(userData, computed){
 // Event listeners
 // =====================================================
 
-// Freemium ob nalaganju
+// Prikaz vseh hiš ob nalaganju strani
 document.addEventListener('DOMContentLoaded', () => {
-  const computed = composeSnapshotText({
-    name: 'Anonim',
-    dob: '2000-01-01',
-    time: '00:00',
-    place: ''
-  });
-  renderZodiacCards(computed.housesAssigned, 'free');
+  renderZodiacCards(houses13, 'free');
 });
 
 // Compute button
