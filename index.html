@@ -282,7 +282,11 @@ document.getElementById('btnCompute').addEventListener('click', async ()=>{
   saveUserData(userData);
   const computed = composeSnapshotText(userData);
   renderZodiacCards(computed.housesAssigned, 'free');
-  document.getElementById('snapshotBox').innerText = computed.text;
+
+  const freeText = await generatePrediction('free', userData, computed);
+  document.getElementById('snapshotBox').innerText = freeText;
+
+  document.getElementById('statusText').innerText = "Freemium napoved pripravljena!";
 });
 
 document.getElementById('btnPremium').addEventListener('click', async ()=>{
