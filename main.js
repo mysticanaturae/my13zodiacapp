@@ -147,24 +147,43 @@ function renderZodiacCards(housesAssigned) {
 // =====================================================
 // OPENAI NAPOVED
 // =====================================================
-async function generatePrediction(level, userData, computed, astro) {
-    try {
-        const response = await fetch('/generateforecast.js', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                snapshot: computed.text,
-                sun: astro.sun,
-                moon: astro.moon,
-                asc: astro.asc,
-                premium: level === "premium"
-            })
-        });
-        const data = await response.json();
-        return data?.choices?.[0]?.message?.content || "Napaka: prazna vsebina iz OpenAI.";
-    } catch (err) {
-        return "Napaka pri generiranju napovedi.";
+async function generatePrediction(level, userData, computed){
+  const { sun, moon, asc, housesAssigned } = computed;
+
+  if(level === 'free'){
+    return `Danes za ${userData.name}: Sonce v ${sun} vabi k jasnosti, Luna v ${moon} podpira čustveno preobrazbo, Ascendent v ${asc} odpira vrata priložnostim.`;
+  }
+
+  // PREMIUM
+  try {
+    const res = await fetch('/api/generateforecast', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        snapshot: {
+          sun,
+          moon,
+          asc,
+          houses: housesAssigned,
+          raw: computed.text,
+          userData
+        },
+        premium: true
+      })
+    });
+
+    const data = await res.json();
+
+    if(data?.choices?.[0]?.message?.content){
+      return data.choices[0].message.content;
     }
+
+    return demoPremiumText(userData, computed);
+
+  } catch(err){
+    console.error("Premium fetch failed", err);
+    return demoPremiumText(userData, computed);
+  }
 }
 
 // =====================================================

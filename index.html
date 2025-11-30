@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         const prompt = buildPremiumPrompt(userData, computed);
         try {
-          const res = await fetch('/api/openai',{
+         const res = await fetch('/api/generateforecast',{
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({prompt,max_tokens:1200})
