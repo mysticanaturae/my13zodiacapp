@@ -1,138 +1,136 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap');
+/* =========================
+   Global Styles
+   ========================= */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: #111; /* temno ozadje */
+  color: #f0f0f0; /* svetel tekst */
+}
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #0d0c1d, #1b1a2f);
-      color: #fff;
-    }
+h1 {
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+  margin-top: 30px;
+  font-size: 2.5rem;
+  color: #fff;
+  text-shadow: 0 0 8px #6c63ff, 0 0 12px #ff6584;
+}
 
-    #zodiacApp {
-      max-width: 1000px;
-      margin: auto;
-      padding: 30px;
-      background: rgba(0,0,0,0.7);
-      border-radius: 20px;
-      box-shadow: 0 0 50px rgba(255,255,255,0.1);
-      position: relative;
-    }
+.subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: #ccc;
+}
 
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 50px;
-      letter-spacing: 2px;
-      line-height: 1.2;
-      text-align: center;
-      background: linear-gradient(90deg, #ffe9b3, #ffb6e3, #c89cff, #ffe9b3);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(255,255,255,0.3);
-    }
+/* =========================
+   Input Group
+   ========================= */
+.inputGroup {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
 
-    p.subtitle {
-      text-align: center;
-      font-size: 18px;
-      color: #ccc;
-      margin-top: -10px;
-      margin-bottom: 40px;
-    }
+.inputGroup input {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 16px;
+  min-width: 120px;
+}
 
-    .inputGroup {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 25px;
-    }
+.inputGroup input::placeholder {
+  color: #aaa;
+}
 
-    .inputGroup input, .inputGroup button {
-      padding: 12px 15px;
-      border-radius: 12px;
-      border: none;
-      font-size: 16px;
-    }
+.inputGroup button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
 
-    .inputGroup input {
-      min-width: 130px;
-      border: 1px solid #555;
-      background: rgba(255,255,255,0.05);
-      color: #fff;
-    }
+#btnCompute {
+  background: #6c63ff;
+  color: #fff;
+}
 
-    .inputGroup button {
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.3s;
-    }
+#btnCompute:hover {
+  background: #5950d4;
+  box-shadow: 0 0 15px #6c63ff;
+}
 
-    #btnCompute { background: #6c63ff; color: #fff; }
-    #btnCompute:hover { box-shadow: 0 0 15px #6c63ff; }
-    #btnPremium { background: #ff6584; color: #fff; }
-    #btnPremium:hover { box-shadow: 0 0 15px #ff6584; }
+#btnPremium {
+  background: #ff6584;
+  color: #fff;
+}
 
-    #statusText {
-      text-align: center;
-      font-style: italic;
-      margin-bottom: 15px;
-      color: #ffebc3;
-      text-shadow: 0 0 5px #ffebc3;
-    }
+#btnPremium:hover {
+  background: #e04e6d;
+  box-shadow: 0 0 15px #ff6584;
+}
 
-    #snapshotBox {
-      background: rgba(20,20,30,0.8);
-      padding: 25px;
-      border-radius: 15px;
-      white-space: pre-line;
-      border: 1px solid rgba(255,255,255,0.2);
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
-      margin-bottom: 30px;
-      color: #fff;
-      transition: all 0.4s ease-in-out;
-    }
+/* =========================
+   Snapshot Box
+   ========================= */
+#snapshotBox {
+  background: rgba(20,20,30,0.8); /* temno ozadje */
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; /* bela / svetla barva besedila */
+  white-space: pre-line;
+  margin-bottom: 30px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
+}
 
-    #signsRepeater {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-    }
+/* =========================
+   Zodiac Cards
+   ========================= */
+#signsRepeater {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
 
-    .zodiacCard {
-      background: linear-gradient(145deg, #1e1c36, #2b2a4d);
-      padding: 15px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 0 15px rgba(255,255,255,0.05);
-      transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-      color: #ffd1ff;
-    }
+.zodiacCard {
+  background: rgba(30, 30, 40, 0.9);
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    .zodiacCard:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 25px rgba(255,198,255,0.4);
-    }
+.zodiacCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6);
+}
 
-    .zodiacCard strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 18px;
-    }
+.zodiacCard strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+}
 
-    .zodiacCard span {
-      display: block;
-      font-size: 14px;
-      color: #ccc;
-    }
-
-    /* subtle glow animation */
-    @keyframes glow {
-      0% { box-shadow: 0 0 10px rgba(255,198,255,0.2); }
-      50% { box-shadow: 0 0 20px rgba(255,198,255,0.6); }
-      100% { box-shadow: 0 0 10px rgba(255,198,255,0.2); }
-    }
-
-    .premiumHighlight {
-      border: 2px solid #ff6584;
-      animation: glow 2s infinite;
-    }
+/* =========================
+   Status text
+   ========================= */
+#statusText {
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 10px;
+  color: #aaa;
+}
