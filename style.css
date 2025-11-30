@@ -97,17 +97,28 @@ h1 {
 }
 
 /* =========================
+   Zodiac Cards Grid
+   ========================= */
+#signsRepeater {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* vsaj 200px, več na širšem zaslonu */
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+/* =========================
    Zodiac Cards
    ========================= */
 .zodiacCard {
   background: rgba(30, 30, 40, 0.95);
   border-radius: 12px;
-  padding: 20px;
+  padding: 15px;
   text-align: center;
   box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Hover animacija */
 .zodiacCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6);
@@ -116,11 +127,11 @@ h1 {
 /* Naslov hiše */
 .zodiacCard .houseName {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   font-family: 'Playfair Display', serif;
-  font-size: 1.35rem; /* nekoliko večji */
+  font-size: 1.3rem;
   color: #fdfdfd; /* skoraj bela */
-  text-shadow: 0 0 5px rgba(255,255,255,0.25); /* rahlo svetleča obroba */
+  text-shadow: 0 0 4px rgba(255,255,255,0.3);
   font-weight: 600;
 }
 
@@ -128,8 +139,8 @@ h1 {
 .imgContainer {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin: 12px 0;
+  gap: 8px;
+  margin: 8px 0;
 }
 
 .signImage, .rulerImage {
@@ -137,34 +148,34 @@ h1 {
   height: 50px;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(255,255,255,0.25);
+  box-shadow: 0 0 6px rgba(255,255,255,0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .signImage:hover, .rulerImage:hover {
   transform: scale(1.1);
-  box-shadow: 0 0 12px rgba(108,99,255,0.5);
+  box-shadow: 0 0 10px rgba(108,99,255,0.5);
 }
 
 /* Ime znaka in vladarja pod slikami */
 .zodiacCard .signRuler {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 10px;
 }
 
 .zodiacCard .signRuler span {
   font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  color: #fff0f5; /* svetlo roza-bela */
-  text-shadow: 0 0 6px rgba(255,255,255,0.2);
+  font-size: 1.05rem;
+  color: #fff0f5;
+  text-shadow: 0 0 4px rgba(255,255,255,0.2);
 }
 
 /* Opis hiše */
 .zodiacCard .houseDescription {
   font-family: 'Playfair Display', serif;
-  color: #fff0f5; /* svetlo roza-bela */
+  color: #fff0f5;
   font-size: 1rem;
   line-height: 1.5;
   margin-top: 6px;
