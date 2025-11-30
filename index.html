@@ -4,10 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>13-Zodiak Astrologija ✨</title>
-  <link rel="manifest" href="./manifest.json">
-
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="./manifest.json">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
@@ -18,25 +14,26 @@
   <!-- Main JS -->
   <script src="main.js" defer></script>
 
+  <!-- PWA Service Worker -->
   <script>
    if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js')
-    .then(reg => {
-      console.log("Service Worker registered");
-      if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-      reg.addEventListener('updatefound', () => {
-        const newWorker = reg.installing;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed') {
-            console.log('New SW installed.');
-          }
-        });
-      });
-    })
-    .catch(err => console.log("Service Worker registration failed:", err));
-}
+     navigator.serviceWorker.register('./sw.js')
+       .then(reg => {
+         console.log("Service Worker registered");
+         if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+         reg.addEventListener('updatefound', () => {
+           const newWorker = reg.installing;
+           newWorker.addEventListener('statechange', () => {
+             if (newWorker.state === 'installed') {
+               console.log('New SW installed.');
+             }
+           });
+         });
+       })
+       .catch(err => console.log("Service Worker registration failed:", err));
+   }
   </script>
-</head>
+ </head>
 <body>
 
   <div id="zodiacApp">
@@ -186,21 +183,36 @@ function demoPremiumText(userData,computed){
   return out;
 }
 
-// Funkcije za render
-// Render funkcija za prikaz hiš z znaki in vladarji
-function renderZodiacCards(housesAssigned){
+// Render funkcija za prikaz hiš z znaki in vladarji glede na nivo
+function renderZodiacCards(housesAssigned, level='free'){
   const container = document.getElementById('signsRepeater');
   container.innerHTML = '';
 
   housesAssigned.forEach(h => {
     const card = document.createElement('div');
     card.className = 'zodiacCard';
+
+    let imagesHTML = '';
+    if(level === 'premium'){
+      // Premium: obe sliki
+      imagesHTML = `
+        <div class="imgContainer">
+          <img class="signImage" src="${zodiacImages[h.sign]}" alt="${h.sign}">
+          <img class="rulerImage" src="${zodiacImages[h.ruler]}" alt="${h.ruler}">
+        </div>
+      `;
+    } else {
+      // Freemium: samo vladar
+      imagesHTML = `
+        <div class="imgContainer">
+          <img class="rulerImage" src="${zodiacImages[h.ruler]}" alt="${h.ruler}">
+        </div>
+      `;
+    }
+
     card.innerHTML = `
       <span class="houseName">${h.number}. ${h.name}</span>
-      <div class="imgContainer">
-        <img class="signImage" src="${zodiacImages[h.sign]}" alt="${h.sign}">
-        <img class="rulerImage" src="${zodiacImages[h.ruler]}" alt="${h.ruler}">
-      </div>
+      ${imagesHTML}
       <div class="houseDescription">${h.description}</div>
     `;
     container.appendChild(card);

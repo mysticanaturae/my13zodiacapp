@@ -9,9 +9,7 @@ function loadUserData() {
     return data ? JSON.parse(data) : null;
 }
 
-// =====================================================
-// ZODIAK SLIKE
-// =====================================================
+// Povezave do slik znakov
 const zodiacImages = {
     "Oven":"https://static.wixstatic.com/media/7535eb_4686ee40d73541afb9116473eed4cf64~mv2.png",
     "Bik":"https://static.wixstatic.com/media/7535eb_51af61b776b3483b9776bb203f4dd949~mv2.png",
@@ -133,24 +131,41 @@ function composeSnapshotText(userData){
   return { text, sun, moon, asc, housesAssigned };
 }
 
-// Render 13 houses
-function renderZodiacCards(housesAssigned){
+// Render Zodiac Cards
+function renderZodiacCards(housesAssigned, level='free') {
   const container = document.getElementById('signsRepeater');
   container.innerHTML = '';
 
   housesAssigned.forEach(h => {
-    const signImg = zodiacImages[h.sign]?.sign || '';
-    const rulerImg = zodiacImages[h.ruler]?.sign || '';
-
     const card = document.createElement('div');
     card.className = 'zodiacCard';
+
+    let imagesHTML = '';
+    if(level === 'premium') {
+      // Premium: obe sliki, znak se izračuna
+      imagesHTML = `
+        <div class="imgContainer">
+          <img src="${zodiacImages[h.sign]}" class="signImage" alt="${h.sign}">
+          <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}">
+        </div>
+      `;
+    } else {
+      // Freemium: samo vladar
+      imagesHTML = `
+        <div class="imgContainer">
+          <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}">
+        </div>
+      `;
+    }
+
     card.innerHTML = `
-      <strong>${h.number}. ${h.name}</strong>
-      <div class="imgContainer">
-        <img src="${signImg}" alt="${h.sign}" class="signImage">
-        <img src="${rulerImg}" alt="${h.ruler}" class="rulerImage">
+      <div class="houseName">${h.number}. ${h.name}</div>
+      ${imagesHTML}
+      <div class="signRuler">
+        <span>Znak: ${h.sign}</span>
+        <span>Vladar: ${h.ruler}</span>
       </div>
-      <br>Znak: ${h.sign}<br>Vladar: ${h.ruler}
+      <div class="houseDescription">${h.description}</div>
     `;
     container.appendChild(card);
   });

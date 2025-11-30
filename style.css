@@ -5,8 +5,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Montserrat', sans-serif;
-  background: #111; /* temno ozadje */
-  color: #f0f0f0; /* svetel tekst */
+  background: #111;
+  color: #f0f0f0;
 }
 
 h1 {
@@ -84,13 +84,13 @@ h1 {
    Snapshot Box
    ========================= */
 #snapshotBox {
-  background: rgba(20, 20, 30, 0.9);
+  background: rgba(20,20,30,0.9);
   padding: 20px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255,255,255,0.1);
   white-space: pre-line;
   margin-bottom: 30px;
-  color: #fdf0f5;
+  color: #f0f0f0;
   font-size: 16px;
   line-height: 1.5;
   box-shadow: 0 0 12px rgba(108, 99, 255, 0.3);
@@ -101,14 +101,12 @@ h1 {
    ========================= */
 #signsRepeater {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* vsaj 200px, več na širšem zaslonu */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;
   margin-bottom: 30px;
 }
 
-/* =========================
-   Zodiac Cards
-   ========================= */
+/* Zodiac Cards */
 .zodiacCard {
   background: rgba(30, 30, 40, 0.95);
   border-radius: 12px;
@@ -118,7 +116,6 @@ h1 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover animacija */
 .zodiacCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6);
@@ -130,7 +127,7 @@ h1 {
   margin-bottom: 10px;
   font-family: 'Playfair Display', serif;
   font-size: 1.3rem;
-  color: #fdfdfd; /* skoraj bela */
+  color: #fdfdfd;
   text-shadow: 0 0 4px rgba(255,255,255,0.3);
   font-weight: 600;
 }
@@ -182,12 +179,13 @@ h1 {
 }
 
 /* =========================
-   Status text
-   ========================= */
-#statusText {
-  text-align: center;
-  font-style: italic;
-  margin-bottom: 10px;
-  color: #aaa;
-}
- 
+       Responsive for very small screens
+       ========================= */
+    @media(max-width: 480px) {
+      #signsRepeater {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      }
+      .zodiacCard .houseName { font-size: 1.1rem; }
+      .zodiacCard .signRuler span { font-size: 1rem; }
+      .signImage, .rulerImage { width: 40px; height: 40px; }
+    }
