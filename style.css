@@ -90,104 +90,6 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.1);
   white-space: pre-line;
   margin-bottom: 30px;
-  color: #f0f0f0;
-  font-size: 16px;
-  line-height: 1.5;
-  box-shadow: 0 0 12px rgba(108, 99, 255, 0.3);
-}
-
-/* =========================
-   Global Styles
-   ========================= */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Montserrat', sans-serif;
-  background: #111; /* temno ozadje */
-  color: #f0f0f0; /* svetel tekst */
-}
-
-h1 {
-  font-family: 'Playfair Display', serif;
-  text-align: center;
-  margin-top: 30px;
-  font-size: 2.5rem;
-  color: #fff;
-  text-shadow: 0 0 8px #6c63ff, 0 0 12px #ff6584;
-}
-
-.subtitle {
-  text-align: center;
-  font-size: 1.1rem;
-  margin-bottom: 30px;
-  color: #ccc;
-}
-
-/* =========================
-   Input Group
-   ========================= */
-.inputGroup {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.inputGroup input {
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: 1px solid #555;
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  font-size: 16px;
-  min-width: 120px;
-}
-
-.inputGroup input::placeholder {
-  color: #aaa;
-}
-
-.inputGroup button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-#btnCompute {
-  background: #6c63ff;
-  color: #fff;
-}
-
-#btnCompute:hover {
-  background: #5950d4;
-  box-shadow: 0 0 15px #6c63ff;
-}
-
-#btnPremium {
-  background: #ff6584;
-  color: #fff;
-}
-
-#btnPremium:hover {
-  background: #e04e6d;
-  box-shadow: 0 0 15px #ff6584;
-}
-
-/* =========================
-   Snapshot Box
-   ========================= */
-#snapshotBox {
-  background: rgba(20, 20, 30, 0.9);
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  white-space: pre-line;
-  margin-bottom: 30px;
   color: #fdf0f5;
   font-size: 16px;
   line-height: 1.5;
@@ -197,17 +99,10 @@ h1 {
 /* =========================
    Zodiac Cards
    ========================= */
-#signsRepeater {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
 .zodiacCard {
   background: rgba(30, 30, 40, 0.95);
   border-radius: 12px;
-  padding: 15px;
+  padding: 20px; /* več prostora za tekst */
   text-align: center;
   box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -218,16 +113,37 @@ h1 {
   box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6);
 }
 
-.zodiacCard strong {
+/* Naslov hiše */
+.zodiacCard .houseName {
   display: block;
-  margin-bottom: 8px;
-  color: #ffb6c1; /* svetlo pink za naslove */
-  text-shadow: 0 0 6px #ffb6c1, 0 0 10px #fff; /* rahlo svetleča obroba */
-  font-family: 'Playfair Display', serif;
+  margin-bottom: 10px;
+  font-family: 'Playfair Display', serif; /* enak kot znak in vladar */
+  font-size: 1.3rem; /* večji font */
+  color: #fdf0f5; /* skoraj bela z rahlo barvo */
+  text-shadow: 0 0 4px rgba(255,255,255,0.3); /* rahlo svetleča obroba */
+  font-weight: 600;
 }
 
-.zodiacCard p, .zodiacCard span {
-  color: #fdf0f5; /* svetlo roza-bela za ostali tekst */
+/* Znak in vladar */
+.zodiacCard .signRuler {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.zodiacCard .signRuler span {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: #ffb6c1; /* rahlo roza za kontrast */
+  text-shadow: 0 0 6px #ffb6c1, 0 0 10px #fff;
+}
+
+/* Opis hiše */
+.zodiacCard .houseDescription {
+  color: #fdf0f5; /* svetlo roza-bela */
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 /* =========================
@@ -262,3 +178,4 @@ h1 {
   margin-bottom: 10px;
   color: #aaa;
 }
+ 
