@@ -135,12 +135,23 @@ function composeSnapshotText(userData){
 
 // Render 13 houses
 function renderZodiacCards(housesAssigned){
-  const container=document.getElementById('signsRepeater');
-  container.innerHTML='';
-  housesAssigned.forEach(h=>{
-    const card=document.createElement('div');
-    card.className='zodiacCard';
-    card.innerHTML=`<strong>${h.number}. ${h.name}</strong><br>Znak: ${h.sign}<br>Vladar: ${h.ruler}`;
+  const container = document.getElementById('signsRepeater');
+  container.innerHTML = '';
+
+  housesAssigned.forEach(h => {
+    const signImg = zodiacImages[h.sign]?.sign || '';
+    const rulerImg = zodiacImages[h.ruler]?.sign || '';
+
+    const card = document.createElement('div');
+    card.className = 'zodiacCard';
+    card.innerHTML = `
+      <strong>${h.number}. ${h.name}</strong>
+      <div class="imgContainer">
+        <img src="${signImg}" alt="${h.sign}" class="signImage">
+        <img src="${rulerImg}" alt="${h.ruler}" class="rulerImage">
+      </div>
+      <br>Znak: ${h.sign}<br>Vladar: ${h.ruler}
+    `;
     container.appendChild(card);
   });
 }
