@@ -101,16 +101,18 @@ h1 {
    ========================= */
 #signsRepeater {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 15px;
   margin-bottom: 30px;
 }
 
-/* Zodiac Cards */
+/* =========================
+   Individual Zodiac Card
+   ========================= */
 .zodiacCard {
   background: rgba(30, 30, 40, 0.95);
   border-radius: 12px;
-  padding: 15px;
+  padding: 20px;
   text-align: center;
   box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -121,23 +123,27 @@ h1 {
   box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6);
 }
 
-/* Naslov hiše */
+/* =========================
+   House Title
+   ========================= */
 .zodiacCard .houseName {
   display: block;
   margin-bottom: 10px;
   font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
-  color: #fdfdfd;
+  font-size: 1.4rem;
+  color: #fdf0f5;
   text-shadow: 0 0 4px rgba(255,255,255,0.3);
   font-weight: 600;
 }
 
-/* Slike znaka in vladarja */
+/* =========================
+   Sign & Ruler Images
+   ========================= */
 .imgContainer {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin: 8px 0;
+  gap: 10px;
+  margin: 10px 0;
 }
 
 .signImage, .rulerImage {
@@ -145,16 +151,17 @@ h1 {
   height: 50px;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 0 6px rgba(255,255,255,0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 8px rgba(255,255,255,0.3);
+  transition: transform 0.3s ease;
 }
 
 .signImage:hover, .rulerImage:hover {
   transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(108,99,255,0.5);
 }
 
-/* Ime znaka in vladarja pod slikami */
+/* =========================
+   Sign & Ruler Text
+   ========================= */
 .zodiacCard .signRuler {
   display: flex;
   justify-content: center;
@@ -164,28 +171,54 @@ h1 {
 
 .zodiacCard .signRuler span {
   font-family: 'Playfair Display', serif;
-  font-size: 1.05rem;
-  color: #fff0f5;
-  text-shadow: 0 0 4px rgba(255,255,255,0.2);
-}
-
-/* Opis hiše */
-.zodiacCard .houseDescription {
-  font-family: 'Playfair Display', serif;
-  color: #fff0f5;
-  font-size: 1rem;
-  line-height: 1.5;
-  margin-top: 6px;
+  font-size: 1.1rem;
+  color: #ffb6c1;
+  text-shadow: 0 0 6px #ffb6c1, 0 0 10px #fff;
 }
 
 /* =========================
-       Responsive for very small screens
-       ========================= */
-    @media(max-width: 480px) {
-      #signsRepeater {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      }
-      .zodiacCard .houseName { font-size: 1.1rem; }
-      .zodiacCard .signRuler span { font-size: 1rem; }
-      .signImage, .rulerImage { width: 40px; height: 40px; }
-    }
+   House Description
+   ========================= */
+.zodiacCard .houseDescription {
+  color: #fdf0f5;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* =========================
+   Responsive Adjustments
+   ========================= */
+@media (max-width: 1200px) {
+  .zodiacCard {
+    padding: 18px;
+  }
+  .zodiacCard .houseName {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 900px) {
+  #signsRepeater {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  .signImage, .rulerImage {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+@media (max-width: 600px) {
+  #signsRepeater {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  .zodiacCard .houseName {
+    font-size: 1.2rem;
+  }
+  .signImage, .rulerImage {
+    width: 40px;
+    height: 40px;
+  }
+  .zodiacCard .signRuler span {
+    font-size: 1rem;
+  }
+}
