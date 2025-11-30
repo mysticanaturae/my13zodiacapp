@@ -85,67 +85,115 @@ const houses13 = [
     { number:13, name:"Hiša Duše in Karmičnih Lekcij",ruler:"Ribi",     description:"Karma, nezavedno, skrivnosti, razsvetljenje."}
 ];
 
-// =====================================================
-// FUNKCIJE
-// =====================================================
-function formatMMDD(date){
-    const m = (date.getMonth()+1).toString().padStart(2,'0');
-    const d = date.getDate().toString().padStart(2,'0');
-    return `${m}-${d}`;
+// --- Berg / IAU-like sign starts (v stopinjah ekliptike, index = Oven ... Ribi)
+const SIGN_STARTS = [
+  0.0,   // Oven (Aries) start
+  33.0,  // Bik (Taurus)
+  61.0,  // Dvojčka (Gemini)
+  90.0,  // Rak (Cancer)
+  118.0, // Lev (Leo)
+  152.0, // Devica (Virgo)
+  181.0, // Tehtnica (Libra)
+  207.0, // Škorpijon (Scorpius)
+  241.0, // Ophiuchus
+  258.0, // Strelec (Sagittarius)
+  283.0, // Kozorog (Capricorn)
+  313.0, // Vodnar (Aquarius)
+  333.0  // Ribi (Pisces)
+];
+
+// --- House cusps (točne cusp vrednosti, 0..360) - vnesene iz tvojih hišnih tabel
+const HOUSE_CUSPS = [
+  248.0186, // Cusp 1
+  272.7486, // Cusp 2
+  309.4716, // Cusp 3
+  337.3196, // Cusp 4
+  357.3696, // Cusp 5
+  33.1826,  // Cusp 6
+  77.1416,  // Cusp 7
+  100.3786, // Cusp 8
+  106.9696, // Cusp 9
+  125.5696, // Cusp10
+  158.9876, // Cusp11
+  186.8196, // Cusp12
+  210.9816  // Cusp13
+];
+
+function normalizeDeg(d){
+  let r = d % 360;
+  if(r < 0) r += 360;
+  return r;
 }
 
-function getBergSunSign(date){
-    const mmdd = formatMMDD(date);
-    for(const interval of bergIntervals){
-        const { sign, start, end } = interval;
-        if(start <= end){
-            if(mmdd >= start && mmdd <= end) return sign;
-        } else {
-            if(mmdd >= start || mmdd <= end) return sign;
-        }
-    }
-    return "Neznano";
+function inRangeWrapped(value, start, end){
+  value = normalizeDeg(value);
+  start = normalizeDeg(start);
+  end = normalizeDeg(end);
+  if(start <= end) return (value >= start && value < end);
+  return (value >= start || value < end);
 }
 
-function getScaledMoonSign(date){
-    const refDate = new Date(`${referenceBirth.dob}T${referenceBirth.time}`);
-    const refMoonIndex = zodiac13.indexOf(referenceBirth.moon);
-    const diffDays = Math.floor((date - refDate)/(1000*60*60*24));
-    const steps = Math.round(diffDays / (29.530588853/13));
-    return zodiac13[(refMoonIndex + steps + 13000) % 13];
+// poišče znak iz absolutne ekliptične dolžine (0..360) glede na SIGN_STARTS
+function getSignFromLongitude(longDeg){
+  const deg = normalizeDeg(longDeg);
+  for(let i = SIGN_STARTS.length - 1; i >= 0; i--){
+    const start = SIGN_STARTS[i];
+    const next = SIGN_STARTS[(i+1) % SIGN_STARTS.length];
+    // check wrap by comparing against start points (simple approach)
+    if(inRangeWrapped(deg, start, next)) return zodiac13[i];
+  }
+  return zodiac13[0];
 }
 
-function getScaledAscendant(date){
-    const refDate = new Date(`${referenceBirth.dob}T${referenceBirth.time}`);
-    const refAscIndex = zodiac13.indexOf(referenceBirth.asc);
-    const diffHours = (date - refDate)/(1000*60*60);
-    const steps = Math.floor(diffHours / (24/13));
-    return zodiac13[(refAscIndex + steps + 13000) % 13];
+// poišče hišo iz absolutne dolžine po HOUSE_CUSPS (vrne 1..13)
+function getHouseFromLongitude(longDeg){
+  const deg = normalizeDeg(longDeg);
+  const cusps = HOUSE_CUSPS.map(normalizeDeg);
+  for(let i=0;i<cusps.length;i++){
+    const start = cusps[i];
+    const end = cusps[(i+1)%cusps.length];
+    if(inRangeWrapped(deg, start, end)) return i+1;
+  }
+  return 1;
 }
 
-function assignHousesFromAsc(ascSign){
-    const start = zodiac13.indexOf(ascSign);
-    return houses13.map((h,i)=>({
-        ...h,
-        sign: zodiac13[(start+i)%13]
-    }));
-}
-
+// nova composeSnapshotText, Berg-kompatibilna
 function composeSnapshotText(userData){
-    const birthDate = new Date(`${userData.dob}T${userData.time}`);
-    const sun  = getBergSunSign(birthDate);
-    const moon = getScaledMoonSign(birthDate);
-    const asc  = getScaledAscendant(birthDate);
-    const housesAssigned = assignHousesFromAsc(asc);
+  // 1) datetime
+  const date = new Date(`${userData.dob}T${userData.time}`);
 
-    let text  = `Izračun za: ${userData.name}\n`;
-    text     += `Datum: ${userData.dob}\nUra: ${userData.time}\nKraj: ${userData.place}\n\n`;
-    text     += `🌞 Sonce: ${sun}\n🌙 Luna: ${moon}\n⬆️ Ascendent: ${asc}\n\nHiše:\n`;
-    housesAssigned.forEach(h=>{
-        text += `${h.number}. ${h.name} — znak: ${h.sign} (vladar: ${h.ruler}) — ${h.description}\n`;
-    });
+  // 2) Sonce – po Berg intervalih (MM-DD)
+  const sun = getBergSunSign(date); // uporablja tvoje bergIntervals iz main.js
 
-    return { text, sun, moon, asc, housesAssigned };
+  // 3) LUNA – približno preko lunine faze na dan v letu → map na 13 znakov
+  const yearStart = new Date(date.getFullYear(),0,1);
+  const dayOfYear = Math.floor((date - yearStart)/(1000*60*60*24));
+  const moonCycle = 29.530588853; // lunacija
+  const moonPhase = (dayOfYear % moonCycle) / moonCycle;
+  const moonIndex = Math.floor(moonPhase * 13) % 13;
+  const moon = zodiac13[moonIndex];
+
+  // 4) ASCENDENT – približno po lokalni uri (24h → 13 znakov)
+  const birthHour = date.getHours() + (date.getMinutes()/60);
+  const ascIndex = Math.floor((birthHour/24) * 13) % 13;
+  const asc = zodiac13[ascIndex];
+
+  // 5) HIŠE: dodeli glede na asc (poravnane z znaki)
+  // Najprej poiščemo, kateri znak je asc in naredimo mapping hiš -> znak
+  const ascSignIndex = zodiac13.indexOf(asc);
+  const housesAssigned = houses13.map((h,i)=>({
+    ...h,
+    sign: zodiac13[(ascSignIndex + i) % 13]
+  }));
+
+  // 6) TEKST
+  let text = `Izračun za: ${userData.name}\nDatum: ${userData.dob}\nUra: ${userData.time}\nKraj: ${userData.place}\n\n`;
+  text += `🌞 Sonce: ${sun}\n🌙 Luna: ${moon}\n⬆️ Ascendent: ${asc}\n\nHiše:\n`;
+  housesAssigned.forEach(h => {
+    text += `${h.number}. ${h.name} — znak: ${h.sign} (vladar: ${h.ruler}) — ${h.description}\n`;
+  });
+
+  return { text, sun, moon, asc, housesAssigned };
 }
 
 // =====================================================
