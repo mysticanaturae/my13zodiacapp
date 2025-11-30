@@ -62,129 +62,163 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-    /* =========================
-       13-ZODIAK (Berg) CALCULATOR
-       ========================= */
+/* =========================
+   13-ZODIAK (Berg) CALCULATOR
+   ========================= */
 
-    const zodiac13 = ["Oven","Bik","Dvojčka","Rak","Lev","Devica","Tehtnica","Škorpijon","Ophiuchus","Strelec","Kozorog","Vodnar","Ribi"];
+const zodiac13 = ["Oven","Bik","Dvojčka","Rak","Lev","Devica","Tehtnica","Škorpijon","Ophiuchus","Strelec","Kozorog","Vodnar","Ribi"];
 
-    const bergIntervals = [
-      {sign:"Oven", start:"04-19", end:"05-13"},
-      {sign:"Bik", start:"05-14", end:"06-19"},
-      {sign:"Dvojčka", start:"06-20", end:"07-20"},
-      {sign:"Rak", start:"07-21", end:"08-09"},
-      {sign:"Lev", start:"08-10", end:"09-15"},
-      {sign:"Devica", start:"09-16", end:"10-30"},
-      {sign:"Tehtnica", start:"10-31", end:"11-22"},
-      {sign:"Škorpijon", start:"11-23", end:"11-29"},
-      {sign:"Ophiuchus", start:"11-30", end:"12-17"},
-      {sign:"Strelec", start:"12-18", end:"01-18"},
-      {sign:"Kozorog", start:"01-19", end:"02-15"},
-      {sign:"Vodnar", start:"02-16", end:"03-11"},
-      {sign:"Ribi", start:"03-12", end:"04-18"}
-    ];
+const houses13 = [
+  {number:1, name:"Hiša Sebstva", ruler:"Oven", description:"Osnova identitete, fizično telo, osebni izraz."},
+  {number:2, name:"Hiša Vrednosti", ruler:"Bik", description:"Finančni in materialni viri, vrednote."},
+  {number:3, name:"Hiša Komunikacije", ruler:"Dvojčka", description:"Misli, komunikacija, lokalno okolje."},
+  {number:4, name:"Hiša Doma", ruler:"Rak", description:"Družina, notranji svet, čustvena varnost."},
+  {number:5, name:"Hiša Kreativnosti", ruler:"Lev", description:"Ustvarjalnost, ljubezen, otroci."},
+  {number:6, name:"Hiša Dela", ruler:"Devica", description:"Rutina, zdravje, služba."},
+  {number:7, name:"Hiša Partnerstva", ruler:"Tehtnica", description:"Odnosi, partnerstva, kontrakti."},
+  {number:8, name:"Hiša Transformacije", ruler:"Škorpijon", description:"Globoke spremembe, dedovanje, intimnost."},
+  {number:9, name:"Hiša Transparentnosti", ruler:"Ophiuchus", description:"Samospoznanje, samoozdravitev, globoke resnice."},
+  {number:10, name:"Hiša Potovanj in Filozofije", ruler:"Strelec", description:"Razširjanje obzorij, učenje, potovanja, filozofija."},
+  {number:11, name:"Hiša Karier", ruler:"Kozorog", description:"Poklic, ambicije, javni ugled."},
+  {number:12, name:"Hiša Prijateljstev", ruler:"Vodnar", description:"Skupnosti, prijatelji, dolgoročni cilji."},
+  {number:13, name:"Hiša Duše in Karmičnih Lekcij", ruler:"Ribi", description:"Karma, skrivnosti, razsvetljenje, duhovna rast."}
+];
 
-    const houses13 = [
-      {number:1, name:"Hiša Sebstva", ruler:"Oven", description:"Osnova identitete, fizično telo, osebni izraz."},
-      {number:2, name:"Hiša Vrednosti", ruler:"Bik", description:"Finančni in materialni viri, vrednote."},
-      {number:3, name:"Hiša Komunikacije", ruler:"Dvojčka", description:"Misli, komunikacija, lokalno okolje."},
-      {number:4, name:"Hiša Doma", ruler:"Rak", description:"Družina, notranji svet, čustvena varnost."},
-      {number:5, name:"Hiša Kreativnosti", ruler:"Lev", description:"Ustvarjalnost, ljubezen, otroci."},
-      {number:6, name:"Hiša Dela", ruler:"Devica", description:"Rutina, zdravje, služba."},
-      {number:7, name:"Hiša Partnerstva", ruler:"Tehtnica", description:"Odnosi, partnerstva, kontrakti."},
-      {number:8, name:"Hiša Transformacije", ruler:"Škorpijon", description:"Globoke spremembe, dedovanje, intimnost."},
-      {number:9, name:"Hiša Transparentnosti", ruler:"Ophiuchus", description:"Samospoznanje, samoozdravitev, globoke resnice."},
-      {number:10, name:"Hiša Potovanj in Filozofije", ruler:"Strelec", description:"Razširjanje obzorij, učenje, potovanja, filozofija."},
-      {number:11, name:"Hiša Karier", ruler:"Kozorog", description:"Poklic, ambicije, javni ugled."},
-      {number:12, name:"Hiša Prijateljstev", ruler:"Vodnar", description:"Skupnosti, prijatelji, dolgoročni cilji."},
-      {number:13, name:"Hiša Duše in Karmičnih Lekcij", ruler:"Ribi", description:"Karma, skrivnosti, razsvetljenje, duhovna rast."}
-    ];
+// Natal reference (tvoje rojstne energije)
+const natalReference = {
+  dob: "1978-03-10",
+  time: "00:55",
+  sun: "Vodnar",
+  moon: "Ribi",
+  asc: "Ophiuchus"
+};
 
-    function formatMMDD(date){const m=(date.getMonth()+1).toString().padStart(2,'0');const d=date.getDate().toString().padStart(2,'0');return `${m}-${d}`;}
-    function getBergSunSign(date){const mmdd=formatMMDD(date);for(const it of bergIntervals){const s=it.start,e=it.end;if(s<=e){if(mmdd>=s && mmdd<=e) return it.sign;}else{if(mmdd>=s || mmdd<=e) return it.sign;}}return "Neznano";}
-    function toJulianDateUTC(date){const Y=date.getUTCFullYear();const M=date.getUTCMonth()+1;const D=date.getUTCDate()+(date.getUTCHours()/24)+(date.getUTCMinutes()/(24*60))+(date.getUTCSeconds()/(24*3600));let y=Y;let m=M;if(m<=2){y-=1;m+=12;}const A=Math.floor(y/100);const B=2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+D+B-1524.5;}
-    function getApproxMoonSign(date){const jd=toJulianDateUTC(date);const synodicMonth=29.530588853;const age=((jd-2451550.1)%synodicMonth+synodicMonth)%synodicMonth;const sector=Math.floor(age/(synodicMonth/13));return zodiac13[sector%13];}
-    function getBergAscendant(localDate){const hour=localDate.getHours();const minute=localDate.getMinutes();const second=localDate.getSeconds();const decimalHours=hour+minute/60+second/3600;const segmentLength=24/13;const idx=Math.floor(decimalHours/segmentLength)%13;return zodiac13[idx];}
-    function assignHousesFromAsc(ascSign){const start=zodiac13.indexOf(ascSign);return houses13.map((h,i)=>({...h, sign:zodiac13[(start+i)%13]}));}
-    function composeSnapshotText(userData){const birthDate=new Date(`${userData.dob}T${userData.time}`);const sun=getBergSunSign(birthDate);const moon=getApproxMoonSign(birthDate);const asc=getBergAscendant(birthDate);const housesAssigned=assignHousesFromAsc(asc);let text=`Izračun za: ${userData.name}\nDatum: ${userData.dob}\nUra: ${userData.time}\nKraj: ${userData.place}\n\n`;text+=`Sonce: ${sun}\nLuna (približno): ${moon}\nAscendent (Berg linear): ${asc}\n\n`;text+=`Če si premium, dobiš razpreditev vseh 13 hiš in podrobno razlago.\n`;return { text, sun, moon, asc, housesAssigned };}
+function composeSnapshotText(userData){
+  const birthDate = new Date(`${userData.dob}T${userData.time}`);
+  const refDate = new Date(`${natalReference.dob}T${natalReference.time}`);
 
-    function buildPremiumPrompt(userData, computed){
-      const { name, dob, time, place } = userData;
-      const { sun, moon, asc, housesAssigned } = computed;
-      const houseLines = housesAssigned.map(h => `${h.number}. ${h.name} — znak: ${h.sign} (vladar: ${h.ruler}) — ${h.description}`).join('\n');
-      return `Ustvari globoko, personalizirano astrološko razlago za ${name}.\nRojstni podatki: ${dob} ob ${time}, kraj: ${place}.\nSistem: 13-zodiak Berg, Ophiuchus je 9. znak.\nPoložaji:\n- Sonce: ${sun}\n- Luna: ${moon}\n- Ascendent: ${asc}\n\nHiše:\n${houseLines}\n\nProsimo za kratko 1-odstavek razlage, eno praktično nalogo na hišo, eno afirmacijo na konec.\nDolžina do 900 znakov, ton: mističen, empatičen, transformacijski.`;
-    }
+  // razlika v dneh in urah
+  const dayDiff = Math.floor((birthDate - refDate) / (1000*60*60*24));
+  const hoursDiff = (birthDate - refDate) / (1000*60*60);
 
-    async function generatePrediction(level, userData, computed){
-      if(level==='free'){
-        return `Danes za ${userData.name}: Sonce v ${computed.sun} vabi k jasnosti, Luna v ${computed.moon} podpira čustveno preobrazbo, Ascendent v ${computed.asc} odpira vrata priložnostim.`;
-      } else {
-        const prompt = buildPremiumPrompt(userData, computed);
-        try {
-         const res = await fetch('/api/generateforecast',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({prompt,max_tokens:1200})
-          });
-          if(!res.ok) return demoPremiumText(userData,computed);
-          const json = await res.json();
-          return json.text || demoPremiumText(userData,computed);
-        } catch(e){
-          console.warn('Backend call failed',e);
-          return demoPremiumText(userData,computed);
-        }
-      }
-    }
+  // Sonce (premik po 13 znakov)
+  const natalSunIdx = zodiac13.indexOf(natalReference.sun);
+  const sunIdx = (natalSunIdx + dayDiff) % 13;
+  const sunSign = zodiac13[(sunIdx + 13) % 13];
 
-    function demoPremiumText(userData,computed){
-      const { sun, moon, asc, housesAssigned } = computed;
-      let out = `🌟 PREMIUM (demo) za ${userData.name}\nSonce: ${sun}\nLuna: ${moon}\nAsc: ${asc}\n\nHiše (kratek pregled):\n`;
-      housesAssigned.forEach(h=>out+=`${h.number}. ${h.name} — ${h.sign}: ${h.description}\n`);
-      out += `\n(Opomba: za polno AI razlago poveži /api/openai.)`;
-      return out;
-    }
+  // Luna (približno 29-dnevni cikel, 13 delov)
+  const natalMoonIdx = zodiac13.indexOf(natalReference.moon);
+  const moonCycle = 29;
+  const moonShift = Math.floor((dayDiff % moonCycle) * 13 / moonCycle);
+  const moonSign = zodiac13[(natalMoonIdx + moonShift + 13) % 13];
 
-    function renderZodiacCards(housesAssigned){
-      const container=document.getElementById('signsRepeater');
-      container.innerHTML='';
-      housesAssigned.forEach(h=>{
-        const card=document.createElement('div');
-        card.className='zodiacCard';
-        card.innerHTML=`<strong>${h.number}. ${h.name}</strong><br>Znak: ${h.sign}<br>Vladar: ${h.ruler}`;
-        container.appendChild(card);
+  // Ascendent (linearni 24h cikel)
+  const natalAscIdx = zodiac13.indexOf(natalReference.asc);
+  const ascShift = Math.floor((hoursDiff / 24) * 13);
+  const ascSign = zodiac13[(natalAscIdx + ascShift + 13) % 13];
+
+  // Hiše
+  const startIdx = zodiac13.indexOf(ascSign);
+  const housesAssigned = houses13.map((h,i)=>({...h, sign:zodiac13[(startIdx+i)%13]}));
+
+  // Tekst
+  let text = `Izračun za: ${userData.name}\nDatum: ${userData.dob}\nUra: ${userData.time}\nKraj: ${userData.place}\n\n`;
+  text += `🌞 Sonce: ${sunSign}\n🌙 Luna (približno): ${moonSign}\n⬆️ Ascendent: ${ascSign}\n\n`;
+
+  return { text, sun: sunSign, moon: moonSign, asc: ascSign, housesAssigned };
+}
+
+function buildPremiumPrompt(userData, computed){
+  const { name, dob, time, place } = userData;
+  const { sun, moon, asc, housesAssigned } = computed;
+  const houseLines = housesAssigned.map(h => `${h.number}. ${h.name} — znak: ${h.sign} (vladar: ${h.ruler}) — ${h.description}`).join('\n');
+  return `Ustvari globoko, personalizirano astrološko razlago za ${name}.\nRojstni podatki: ${dob} ob ${time}, kraj: ${place}.\nSistem: 13-zodiak Berg, Ophiuchus je 9. znak.\nPoložaji:\n- Sonce: ${sun}\n- Luna: ${moon}\n- Ascendent: ${asc}\n\nHiše:\n${houseLines}\n\nProsimo za kratko 1-odstavek razlage, eno praktično nalogo na hišo, eno afirmacijo na konec.\nDolžina do 900 znakov, ton: mističen, empatičen, transformacijski.`;
+}
+
+async function generatePrediction(level, userData, computed){
+  if(level==='free'){
+    return `Danes za ${userData.name}: Sonce v ${computed.sun} vabi k jasnosti, Luna v ${computed.moon} podpira čustveno preobrazbo, Ascendent v ${computed.asc} odpira vrata priložnostim.`;
+  } else {
+    const prompt = buildPremiumPrompt(userData, computed);
+    try {
+      const res = await fetch('/api/generateforecast',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          snapshot:{
+            sun: computed.sun,
+            moon: computed.moon,
+            asc: computed.asc,
+            houses: computed.housesAssigned,
+            raw: computed.text,
+            userData
+          },
+          premium:true
+        })
       });
+      const data = await res.json();
+      if(data?.choices?.[0]?.message?.content){
+        return data.choices[0].message.content;
+      }
+      return demoPremiumText(userData,computed);
+    } catch(e){
+      console.warn('Backend call failed',e);
+      return demoPremiumText(userData,computed);
     }
+  }
+}
 
-    function saveUserData(userData){ localStorage.setItem('astroUser',JSON.stringify(userData)); }
-    function loadUserData(){ const d=localStorage.getItem('astroUser'); return d?JSON.parse(d):null; }
+function demoPremiumText(userData,computed){
+  const { sun, moon, asc, housesAssigned } = computed;
+  let out = `🌟 PREMIUM (demo) za ${userData.name}\nSonce: ${sun}\nLuna: ${moon}\nAsc: ${asc}\n\nHiše (kratek pregled):\n`;
+  housesAssigned.forEach(h=>out+=`${h.number}. ${h.name} — ${h.sign}: ${h.description}\n`);
+  out += `\n(Opomba: za polno AI razlago poveži /api/openai.)`;
+  return out;
+}
 
-    // Event listeners
-    document.getElementById('btnCompute').addEventListener('click',async()=>{
-      const userData={
-        name: document.getElementById('nameInput').value || 'Anonim',
-        dob: document.getElementById('dobInput').value,
-        time: document.getElementById('timeInput').value || '00:00',
-        place: document.getElementById('placeInput').value || ''
-      };
-      saveUserData(userData);
-      const computed=composeSnapshotText(userData);
-      document.getElementById('snapshotBox').innerText=computed.text;
-      document.getElementById('statusText').innerText="Freemium snapshot izračunan!";
-      const freeText=await generatePrediction('free',userData,computed);
-      document.getElementById('snapshotBox').innerText+=`\n\n${freeText}`;
-    });
+// Funkcije za render
+function renderZodiacCards(housesAssigned){
+  const container=document.getElementById('signsRepeater');
+  container.innerHTML='';
+  housesAssigned.forEach(h=>{
+    const card=document.createElement('div');
+    card.className='zodiacCard';
+    card.innerHTML=`<strong>${h.number}. ${h.name}</strong><br>Znak: ${h.sign}<br>Vladar: ${h.ruler}`;
+    container.appendChild(card);
+  });
+}
 
-    document.getElementById('btnPremium').addEventListener('click',async()=>{
-      const userData=loadUserData();
-      if(!userData){ alert('Najprej izračunaj svoj snapshot!'); return; }
-      document.getElementById('statusText').innerText="Generiram premium napoved...";
-      const computed=composeSnapshotText(userData);
-      renderZodiacCards(computed.housesAssigned);
-      const premium=await generatePrediction('premium',userData,computed);
-      document.getElementById('snapshotBox').innerText=premium;
-      document.getElementById('statusText').innerText="Premium napoved pripravljena!";
-    });
-  </script>
+function saveUserData(userData){ localStorage.setItem('astroUser',JSON.stringify(userData)); }
+function loadUserData(){ const d=localStorage.getItem('astroUser'); return d?JSON.parse(d):null; }
+
+// Event listeners
+document.getElementById('btnCompute').addEventListener('click',async()=>{
+  const userData={
+    name: document.getElementById('nameInput').value || 'Anonim',
+    dob: document.getElementById('dobInput').value,
+    time: document.getElementById('timeInput').value || '00:00',
+    place: document.getElementById('placeInput').value || ''
+  };
+  saveUserData(userData);
+  const computed=composeSnapshotText(userData);
+  document.getElementById('snapshotBox').innerText=computed.text;
+  document.getElementById('statusText').innerText="Freemium snapshot izračunan!";
+  const freeText=await generatePrediction('free',userData,computed);
+  document.getElementById('snapshotBox').innerText+=`\n\n${freeText}`;
+});
+
+document.getElementById('btnPremium').addEventListener('click',async()=>{
+  const userData=loadUserData();
+  if(!userData){ alert('Najprej izračunaj svoj snapshot!'); return; }
+  document.getElementById('statusText').innerText="Generiram premium napoved...";
+  const computed=composeSnapshotText(userData);
+  renderZodiacCards(computed.housesAssigned);
+  const premium=await generatePrediction('premium',userData,computed);
+  document.getElementById('snapshotBox').innerText=premium;
+  document.getElementById('statusText').innerText="Premium napoved pripravljena!";
+});
+</script>
+
 
 </body>
 </html>
