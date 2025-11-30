@@ -26,10 +26,10 @@ const zodiacImages = {
     "Ribi":"https://static.wixstatic.com/media/7535eb_89ce0c6de1324a7394193b0409c18dc1~mv2.png"
 };
 
-<!-- 13-zodiak Berg Calculator (Freemium + Premium) -->
-<script>
+// 13-zodiak
 const zodiac13 = ["Oven","Bik","Dvojčka","Rak","Lev","Devica","Tehtnica","Škorpijon","Ophiuchus","Strelec","Kozorog","Vodnar","Ribi"];
 
+// Berg intervals
 const bergIntervals = [
   {sign:"Oven", start:"04-19", end:"05-13"},
   {sign:"Bik", start:"05-14", end:"06-19"},
@@ -46,6 +46,7 @@ const bergIntervals = [
   {sign:"Ribi", start:"03-12", end:"04-18"}
 ];
 
+// Hiše
 const houses13 = [
   {number:1, name:"Hiša Sebstva", ruler:"Oven", description:"Osnova identitete, fizično telo, osebni izraz."},
   {number:2, name:"Hiša Vrednosti", ruler:"Bik", description:"Finančni in materialni viri, vrednote."},
@@ -62,16 +63,12 @@ const houses13 = [
   {number:13, name:"Hiša Duše in Karmičnih Lekcij", ruler:"Ribi", description:"Karma, skrivnosti, razsvetljenje, duhovna rast."}
 ];
 
-// Reference birth for scaling Moon & Ascendant
-const referenceBirth = {
-  dob: "1978-03-10",
-  time: "00:55",
-  sun: "Vodnar",
-  moon: "Ribi",
-  asc: "Ophiuchus"
-};
+// Reference
+const referenceBirth = { dob: "1978-03-10", time: "00:55", sun: "Vodnar", moon: "Ribi", asc: "Ophiuchus" };
 
-// Berg Sun
+// =====================================================
+// Funkcije za izračune
+// =====================================================
 function formatMMDD(date){ const m=(date.getMonth()+1).toString().padStart(2,'0'); const d=date.getDate().toString().padStart(2,'0'); return `${m}-${d}`; }
 function getBergSunSign(date){
   const mmdd = formatMMDD(date);
@@ -86,15 +83,6 @@ function getBergSunSign(date){
   return "Neznano";
 }
 
-// Julian date
-function toJulianDateUTC(date){
-  const Y=date.getUTCFullYear(), M=date.getUTCMonth()+1, D=date.getUTCDate() + date.getUTCHours()/24 + date.getUTCMinutes()/(24*60) + date.getUTCSeconds()/(24*3600);
-  let y=Y, m=M; if(m<=2){y-=1;m+=12;}
-  const A=Math.floor(y/100), B=2-A+Math.floor(A/4);
-  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+D+B-1524.5;
-}
-
-// Scaled Moon & Ascendant
 function getScaledMoonSign(date){
   const refDate = new Date(`${referenceBirth.dob}T${referenceBirth.time}`);
   const refMoonIndex = zodiac13.indexOf(referenceBirth.moon);
@@ -112,11 +100,10 @@ function getScaledAscendant(date){
 }
 
 function assignHousesFromAsc(ascSign){
-  const start=zodiac13.indexOf(ascSign);
-  return houses13.map((h,i)=>({...h, sign:zodiac13[(start+i)%13]}));
+  const start = zodiac13.indexOf(ascSign);
+  return houses13.map((h,i)=>({...h, sign: zodiac13[(start+i)%13]}));
 }
 
-// Compose snapshot
 function composeSnapshotText(userData){
   const birthDate = new Date(`${userData.dob}T${userData.time}`);
   const sun = getBergSunSign(birthDate);
@@ -131,8 +118,9 @@ function composeSnapshotText(userData){
   return { text, sun, moon, asc, housesAssigned };
 }
 
-// Funkcija za render hiš z znaki in vladarji
-// level = 'free' ali 'premium'
+// =====================================================
+// Render funkcija
+// =====================================================
 function renderZodiacCards(housesAssigned, level = 'free') {
   const container = document.getElementById('signsRepeater');
   container.innerHTML = '';
@@ -141,22 +129,13 @@ function renderZodiacCards(housesAssigned, level = 'free') {
     const card = document.createElement('div');
     card.className = 'zodiacCard';
 
-    // Izbira slik glede na nivo
-    let imagesHTML = '';
+    // Vladar vedno, znak samo premium
+    let imagesHTML = `<div class="imgContainer">
+                        <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}">`;
     if(level === 'premium') {
-      imagesHTML = `
-        <div class="imgContainer">
-          <img src="${zodiacImages[h.sign]}" class="signImage" alt="${h.sign}">
-          <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}">
-        </div>
-      `;
-    } else {
-      imagesHTML = `
-        <div class="imgContainer">
-          <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}">
-        </div>
-      `;
+      imagesHTML += `<img src="${zodiacImages[h.sign]}" class="signImage" alt="${h.sign}">`;
     }
+    imagesHTML += `</div>`;
 
     card.innerHTML = `
       <div class="houseName">${h.number}. ${h.name}</div>
@@ -172,51 +151,9 @@ function renderZodiacCards(housesAssigned, level = 'free') {
   });
 }
 
-// Klic render funkcije ob nalaganju strani (freemium)
-document.addEventListener('DOMContentLoaded', () => {
-  const computed = composeSnapshotText({
-    name: 'Anonim',
-    dob: '2000-01-01',
-    time: '00:00',
-    place: ''
-  });
-  renderZodiacCards(computed.housesAssigned, 'free');
-});
-
-// Event listener za premium gumb
-document.getElementById('btnPremium').addEventListener('click', async () => {
-  const userData = loadUserData();
-  if(!userData) { alert('Najprej izračunaj svoj snapshot!'); return; }
-
-  document.getElementById('statusText').innerText = "Generiram premium napoved...";
-  const computed = composeSnapshotText(userData);
-
-  // Render premium kartice z obema slikama
-  renderZodiacCards(computed.housesAssigned, 'premium');
-
-  const premium = await generatePrediction('premium', userData, computed);
-  document.getElementById('snapshotBox').innerText = premium;
-  document.getElementById('statusText').innerText = "Premium napoved pripravljena!";
-});
-
-// Demo premium text fallback
-function demoPremiumText(userData,computed){
-  const { sun, moon, asc, housesAssigned } = computed;
-  let out = `🌟 PREMIUM (demo) za ${userData.name}\nSonce: ${sun}\nLuna: ${moon}\nAsc: ${asc}\n\nHiše (kratek pregled):\n`;
-  housesAssigned.forEach(h=>out+=`${h.number}. ${h.name} — ${h.sign}: ${h.description}\n`);
-  out += `\n(Opomba: za polno AI razlago poveži /api/openai.)`;
-  return out;
-}
-
-// Build premium prompt for AI
-function buildPremiumPrompt(userData, computed){
-  const { name, dob, time, place } = userData;
-  const { sun, moon, asc, housesAssigned } = computed;
-  const houseLines = housesAssigned.map(h=>`${h.number}. ${h.name} — znak: ${h.sign} (vladar: ${h.ruler}) — ${h.description}`).join('\n');
-  return `Ustvari globoko, personalizirano astrološko razlago za ${name}.\nRojstni podatki: ${dob} ob ${time}, kraj: ${place}.\nSistem: 13-zodiak Berg, Ophiuchus je 9. znak.\nPoložaji:\n- Sonce: ${sun}\n- Luna: ${moon}\n- Ascendent: ${asc}\n\nHiše:\n${houseLines}\n\nProsimo za kratko 1-odstavek razlage, eno praktično nalogo na hišo, eno afirmacijo na konec.\nDolžina do 900 znakov, ton: mističen, empatičen, transformacijski.`;
-}
-
-// Generate prediction
+// =====================================================
+// Generiranje napovedi
+// =====================================================
 async function generatePrediction(level, userData, computed){
   if(level==='free'){
     return `Danes za ${userData.name}: Sonce v ${computed.sun} vabi k jasnosti, Luna v ${computed.moon} podpira čustveno preobrazbo, Ascendent v ${computed.asc} odpira vrata priložnostim.`;
@@ -248,33 +185,69 @@ async function generatePrediction(level, userData, computed){
   }
 }
 
-// Local storage helpers
-function saveUserData(userData){ localStorage.setItem('astroUser',JSON.stringify(userData)); }
+function demoPremiumText(userData,computed){
+  const { sun, moon, asc, housesAssigned } = computed;
+  let out = `🌟 PREMIUM (demo) za ${userData.name}\nSonce: ${sun}\nLuna: ${moon}\nAsc: ${asc}\n\nHiše (kratek pregled):\n`;
+  housesAssigned.forEach(h=>out+=`${h.number}. ${h.name} — ${h.sign}: ${h.description}\n`);
+  out += `\n(Opomba: za polno AI razlago poveži /api/openai.)`;
+  return out;
+}
 
+function buildPremiumPrompt(userData, computed){
+  const { name, dob, time, place } = userData;
+  const { sun, moon, asc, housesAssigned } = computed;
+  const houseLines = housesAssigned.map(h=>`${h.number}. ${h.name} — znak: ${h.sign} (vladar: ${h.ruler}) — ${h.description}`).join('\n');
+  return `Ustvari globoko, personalizirano astrološko razlago za ${name}.\nRojstni podatki: ${dob} ob ${time}, kraj: ${place}.\nSistem: 13-zodiak Berg, Ophiuchus je 9. znak.\nPoložaji:\n- Sonce: ${sun}\n- Luna: ${moon}\n- Ascendent: ${asc}\n\nHiše:\n${houseLines}\n\nProsimo za kratko 1-odstavek razlage, eno praktično nalogo na hišo, eno afirmacijo na konec.\nDolžina do 900 znakov, ton: mističen, empatičen, transformacijski.`;
+}
+
+// =====================================================
 // Event listeners
-document.getElementById('btnCompute').addEventListener('click', async()=>{
-  const userData={
+// =====================================================
+
+// Freemium ob nalaganju
+document.addEventListener('DOMContentLoaded', () => {
+  const computed = composeSnapshotText({
+    name: 'Anonim',
+    dob: '2000-01-01',
+    time: '00:00',
+    place: ''
+  });
+  renderZodiacCards(computed.housesAssigned, 'free');
+});
+
+// Compute button
+document.getElementById('btnCompute').addEventListener('click', async () => {
+  const userData = {
     name: document.getElementById('nameInput').value || 'Anonim',
     dob: document.getElementById('dobInput').value,
     time: document.getElementById('timeInput').value || '00:00',
     place: document.getElementById('placeInput').value || ''
   };
   saveUserData(userData);
-  const computed=composeSnapshotText(userData);
-  document.getElementById('snapshotBox').innerText=computed.text;
-  document.getElementById('statusText').innerText="Freemium snapshot izračunan!";
-  const freeText=await generatePrediction('free',userData,computed);
-  document.getElementById('snapshotBox').innerText+=`\n\n${freeText}`;
+  const computed = composeSnapshotText(userData);
+
+  renderZodiacCards(computed.housesAssigned, 'free');
+  document.getElementById('snapshotBox').innerHTML = `<pre>${computed.text}</pre>`;
+  document.getElementById('statusText').innerText = "Freemium snapshot izračunan!";
+
+  const freeText = await generatePrediction('free', userData, computed);
+  document.getElementById('snapshotBox').innerHTML += `<pre>${freeText}</pre>`;
 });
 
-document.getElementById('btnPremium').addEventListener('click', async()=>{
-  const userData=loadUserData();
-  if(!userData){ alert('Najprej izračunaj svoj snapshot!'); return; }
-  document.getElementById('statusText').innerText="Generiram premium napoved...";
-  const computed=composeSnapshotText(userData);
-  renderZodiacCards(computed.housesAssigned);
-  const premium=await generatePrediction('premium',userData,computed);
-  document.getElementById('snapshotBox').innerText=premium;
-  document.getElementById('statusText').innerText="Premium napoved pripravljena!";
+// Premium button
+document.getElementById('btnPremium').addEventListener('click', async () => {
+  const userData = loadUserData();
+  if (!userData) { 
+    alert('Najprej izračunaj svoj snapshot!'); 
+    return; 
+  }
+
+  document.getElementById('statusText').innerText = "Generiram premium napoved...";
+  const computed = composeSnapshotText(userData);
+
+  renderZodiacCards(computed.housesAssigned, 'premium');
+
+  const premium = await generatePrediction('premium', userData, computed);
+  document.getElementById('snapshotBox').innerHTML = `<pre>${premium}</pre>`;
+  document.getElementById('statusText').innerText = "Premium napoved pripravljena!";
 });
-</script>
