@@ -131,8 +131,9 @@ function composeSnapshotText(userData){
   return { text, sun, moon, asc, housesAssigned };
 }
 
-// Render Zodiac Cards
-function renderZodiacCards(housesAssigned, level='free') {
+// Funkcija za render hiš z znaki in vladarji
+// level = 'free' ali 'premium'
+function renderZodiacCards(housesAssigned, level = 'free') {
   const container = document.getElementById('signsRepeater');
   container.innerHTML = '';
 
@@ -140,9 +141,9 @@ function renderZodiacCards(housesAssigned, level='free') {
     const card = document.createElement('div');
     card.className = 'zodiacCard';
 
+    // Izbira slik glede na nivo
     let imagesHTML = '';
     if(level === 'premium') {
-      // Premium: obe sliki, znak se izračuna
       imagesHTML = `
         <div class="imgContainer">
           <img src="${zodiacImages[h.sign]}" class="signImage" alt="${h.sign}">
@@ -150,7 +151,6 @@ function renderZodiacCards(housesAssigned, level='free') {
         </div>
       `;
     } else {
-      // Freemium: samo vladar
       imagesHTML = `
         <div class="imgContainer">
           <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}">
@@ -167,9 +167,37 @@ function renderZodiacCards(housesAssigned, level='free') {
       </div>
       <div class="houseDescription">${h.description}</div>
     `;
+
     container.appendChild(card);
   });
 }
+
+// Klic render funkcije ob nalaganju strani (freemium)
+document.addEventListener('DOMContentLoaded', () => {
+  const computed = composeSnapshotText({
+    name: 'Anonim',
+    dob: '2000-01-01',
+    time: '00:00',
+    place: ''
+  });
+  renderZodiacCards(computed.housesAssigned, 'free');
+});
+
+// Event listener za premium gumb
+document.getElementById('btnPremium').addEventListener('click', async () => {
+  const userData = loadUserData();
+  if(!userData) { alert('Najprej izračunaj svoj snapshot!'); return; }
+
+  document.getElementById('statusText').innerText = "Generiram premium napoved...";
+  const computed = composeSnapshotText(userData);
+
+  // Render premium kartice z obema slikama
+  renderZodiacCards(computed.housesAssigned, 'premium');
+
+  const premium = await generatePrediction('premium', userData, computed);
+  document.getElementById('snapshotBox').innerText = premium;
+  document.getElementById('statusText').innerText = "Premium napoved pripravljena!";
+});
 
 // Demo premium text fallback
 function demoPremiumText(userData,computed){
