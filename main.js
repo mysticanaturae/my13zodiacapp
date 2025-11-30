@@ -118,10 +118,8 @@ function composeSnapshotText(userData){
   return { text, sun, moon, asc, housesAssigned };
 }
 
-// =====================================================
-// Render funkcija
-// =====================================================
-function renderZodiacCards(housesAssigned, level = 'free') {
+// Funkcija za render vseh hiš ob odprtju (freemium)
+function renderZodiacCards(housesAssigned, level='free') {
   const container = document.getElementById('signsRepeater');
   container.innerHTML = '';
 
@@ -129,13 +127,12 @@ function renderZodiacCards(housesAssigned, level = 'free') {
     const card = document.createElement('div');
     card.className = 'zodiacCard';
 
-    // Vladar vedno, znak samo premium
     let imagesHTML = `<div class="imgContainer">
-                        <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}">`;
-    if(level === 'premium') {
-      imagesHTML += `<img src="${zodiacImages[h.sign]}" class="signImage" alt="${h.sign}">`;
-    }
-    imagesHTML += `</div>`;
+                    <img src="${zodiacImages[h.ruler]}" class="rulerImage" alt="${h.ruler}" title="Vladar: ${h.ruler}">`;
+if(level === 'premium') {
+  imagesHTML += `<img src="${zodiacImages[h.sign]}" class="signImage" alt="${h.sign}" title="Znak: ${h.sign}">`;
+}
+imagesHTML += `</div>`;
 
     card.innerHTML = `
       <div class="houseName">${h.number}. ${h.name}</div>
@@ -146,10 +143,14 @@ function renderZodiacCards(housesAssigned, level = 'free') {
       </div>
       <div class="houseDescription">${h.description}</div>
     `;
-
     container.appendChild(card);
   });
 }
+
+// Ob nalaganju strani prikažemo vse hiše z vladarji (freemium)
+document.addEventListener('DOMContentLoaded', () => {
+  renderZodiacCards(houses13, 'free'); // vse hiše, freemium (samo vladar)
+});
 
 // =====================================================
 // Generiranje napovedi

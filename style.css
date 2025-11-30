@@ -110,17 +110,18 @@ h1 {
    Individual Zodiac Card
    ========================= */
 .zodiacCard {
-  background: rgba(30, 30, 40, 0.95);
-  border-radius: 12px;
-  padding: 20px;
+  background: #1a1a2e;
+  color: #fff;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   text-align: center;
-  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .zodiacCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
 
 /* =========================
@@ -142,47 +143,37 @@ h1 {
 .imgContainer {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 10px;
-  margin: 10px 0;
-}
-
-.signImage, .rulerImage {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(255,255,255,0.3);
-  transition: transform 0.3s ease;
-}
-
-.signImage:hover, .rulerImage:hover {
-  transform: scale(1.1);
-}
-
-/* =========================
-   Sign & Ruler Text
-   ========================= */
-.zodiacCard .signRuler {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
   margin-bottom: 10px;
 }
 
-.zodiacCard .signRuler span {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  color: #ffb6c1;
-  text-shadow: 0 0 6px #ffb6c1, 0 0 10px #fff;
+.imgContainer img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  transition: transform 0.3s;
 }
 
-/* =========================
-   House Description
-   ========================= */
-.zodiacCard .houseDescription {
-  color: #fdf0f5;
-  font-size: 1rem;
-  line-height: 1.5;
+.imgContainer img:hover {
+  transform: scale(1.15) rotate(10deg);
+}
+
+.houseName {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.signRuler {
+  font-size: 0.85em;
+  margin-bottom: 5px;
+}
+
+.houseDescription {
+  font-size: 0.8em;
+  color: #ddd;
 }
 
 /* =========================
