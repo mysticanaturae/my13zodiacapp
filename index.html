@@ -204,9 +204,11 @@ const zodiacImages = {
 function renderZodiacCards(housesAssigned, level='free'){
   const container = document.getElementById('signsRepeater');
   container.innerHTML = '';
+
   housesAssigned.forEach(h => {
     const card = document.createElement('div');
     card.className = 'zodiacCard';
+
     let imagesHTML = '';
     if(level === 'premium'){
       imagesHTML = `<div class="imgContainer">
@@ -218,9 +220,14 @@ function renderZodiacCards(housesAssigned, level='free'){
         <img class="rulerImage" src="${zodiacImages[h.ruler]}" alt="${h.ruler}">
       </div>`;
     }
-    card.innerHTML = `<span class="houseName">${h.number}. ${h.name}</span>
-                      ${imagesHTML}
-                      <div class="houseDescription">${h.description}</div>`;
+
+    card.innerHTML = `
+      <span class="houseName">${h.number}. ${h.name}</span><br>
+      <span class="houseSign">Znak: ${h.sign}</span><br>
+      <span class="houseRuler">Vladar: ${h.ruler}</span>
+      ${imagesHTML}
+      <div class="houseDescription">${h.description}</div>
+    `;
     container.appendChild(card);
   });
 }
