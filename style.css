@@ -102,7 +102,7 @@ h1 {
 .zodiacCard {
   background: rgba(30, 30, 40, 0.95);
   border-radius: 12px;
-  padding: 20px; /* več prostora za tekst */
+  padding: 20px;
   text-align: center;
   box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -116,44 +116,20 @@ h1 {
 /* Naslov hiše */
 .zodiacCard .houseName {
   display: block;
-  margin-bottom: 10px;
-  font-family: 'Playfair Display', serif; /* enak kot znak in vladar */
-  font-size: 1.3rem; /* večji font */
-  color: #fdf0f5; /* skoraj bela z rahlo barvo */
-  text-shadow: 0 0 4px rgba(255,255,255,0.3); /* rahlo svetleča obroba */
+  margin-bottom: 12px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem; /* nekoliko večji */
+  color: #fdfdfd; /* skoraj bela */
+  text-shadow: 0 0 5px rgba(255,255,255,0.25); /* rahlo svetleča obroba */
   font-weight: 600;
 }
 
-/* Znak in vladar */
-.zodiacCard .signRuler {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.zodiacCard .signRuler span {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem;
-  color: #ffb6c1; /* rahlo roza za kontrast */
-  text-shadow: 0 0 6px #ffb6c1, 0 0 10px #fff;
-}
-
-/* Opis hiše */
-.zodiacCard .houseDescription {
-  color: #fdf0f5; /* svetlo roza-bela */
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-/* =========================
-   Zodiac Images
-   ========================= */
+/* Slike znaka in vladarja */
 .imgContainer {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin: 10px 0;
+  gap: 12px;
+  margin: 12px 0;
 }
 
 .signImage, .rulerImage {
@@ -161,12 +137,37 @@ h1 {
   height: 50px;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(255,255,255,0.3);
-  transition: transform 0.3s ease;
+  box-shadow: 0 0 8px rgba(255,255,255,0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .signImage:hover, .rulerImage:hover {
   transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(108,99,255,0.5);
+}
+
+/* Ime znaka in vladarja pod slikami */
+.zodiacCard .signRuler {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.zodiacCard .signRuler span {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: #fff0f5; /* svetlo roza-bela */
+  text-shadow: 0 0 6px rgba(255,255,255,0.2);
+}
+
+/* Opis hiše */
+.zodiacCard .houseDescription {
+  font-family: 'Playfair Display', serif;
+  color: #fff0f5; /* svetlo roza-bela */
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-top: 6px;
 }
 
 /* =========================
