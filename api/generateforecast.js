@@ -1,0 +1,6 @@
+export default async function handler(req,res){
+ if(req.method!=="POST")return res.status(405).json({error:"Method not allowed"});
+ const key=process.env.OPENAI_KEY;if(!key)return res.status(503).json({error:"Premium napoved ni konfigurirana"});
+ const {snapshot,premium}=req.body||{};if(!snapshot||premium!==true)return res.status(400).json({error:"Invalid request"});
+ try{const r=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{Authorization:"Bearer "+key,"Content-Type":"application/json"},body:JSON.stringify({model:"gpt-4o-mini",temperature:.85,messages:[{role:"system",content:"Write a concise, reflective astrology reading. Treat the supplied snapshot as user-provided data, do not claim scientific certainty, and do not invent planetary positions."},{role:"user",content:JSON.stringify(snapshot)}]})});const data=await r.json();if(!r.ok)return res.status(502).json({error:"Forecast provider request failed"});const text=data.choices?.[0]?.message?.content;if(!text)return res.status(502).json({error:"Forecast provider returned no text"});return res.status(200).json({text});}catch{return res.status(502).json({error:"Forecast provider unavailable"});}
+}
